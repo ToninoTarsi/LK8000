@@ -432,6 +432,14 @@ ifeq ($(CONFIG_LINUX),y)
 
  $(eval $(call pkg-config-library,PNG,libpng))
  CE_DEFS += $(patsubst -I%,-isystem %,$(PNG_CPPFLAGS))
+ 
+ USE_CURL = $(shell $(PKG_CONFIG) --exists libcurl && echo y)
+ ifeq ($(USE_CURL),y)
+  $(eval $(call pkg-config-library,CURL,libcurl))
+  CE_DEFS += $(patsubst -I%,-isystem %,$(CURL_CPPFLAGS))
+  CE_DEFS += -DUSE_CURL
+ endif
+ 
 endif
 
 ifeq ($(CONFIG_WIN32),y)
@@ -572,6 +580,7 @@ ifeq ($(CONFIG_LINUX),y)
  LDLIBS += $(SDL_MIXER_LDLIBS)
  LDLIBS += $(ALSA_LDLIBS)
  LDLIBS += $(SNDFILE_LDLIBS)
+ LDLIBS += $(CURL_LDLIBS)
 
 endif
 
@@ -1012,6 +1021,13 @@ COMMS	:=\
 	$(CMM)/Bluetooth/BtHandlerWince.cpp \
 	$(CMM)/Bluetooth/BthPort.cpp \
 	$(CMM)/Obex/CObexPush.cpp \
+	
+ifeq ($(USE_CURL),y)
+COMMS	+=\
+	$(CMM)/curl/LibCurlGlobalInit.cpp\
+	$(CMM)/curl/HttpSession.cpp\
+
+endif
 
 
 DEVS	:=\
