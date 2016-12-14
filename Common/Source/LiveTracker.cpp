@@ -1067,7 +1067,7 @@ static std::string downloadJSON(std::string url) {
 
 	sprintf(txbuf, "/%s", url.c_str());
 
-	rxlen = DoTransactionToServer("api.livetrack24.com", 80, txbuf, rxcontent,
+	rxlen = DoTransactionToServer("www.livetrack24.com", 80, txbuf, rxcontent,
 			sizeof(rxcontent));
 
 	if (rxlen == -1)
@@ -1096,7 +1096,7 @@ false) {
 	std::string url = "api/v2/op/" + subURL;
 	url += "/ak/" + std::string(appKey) + "/vc/" + otpReply(g_otpQuestion);
 	if (calledSelf)
-		url += +"/di/" + g_deviceID + "/ut/" + g_ut;
+		url += "/di/" + g_deviceID + "/ut/" + g_ut;
 
 	std::string reply = downloadJSON(url);
 
@@ -1579,7 +1579,7 @@ static std::string DeltaRLE(std::vector<int> data) {
 	for (unsigned int i = 0; i < data.size(); i++) {
 		int datai = (data[i]);
 
-		if ((i == 0)) {
+		if (i == 0) {
 			res += intToGBase64(datai);
 		} else {
 

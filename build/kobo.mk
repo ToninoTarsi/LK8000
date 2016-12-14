@@ -25,6 +25,9 @@ KOBO_SYS_LIB_NAMES = \
 	libgcc_s.so.1 \
 	librt.so.1 \
 	libpthread.so.0	\
+	libresolv.so.2 \
+	libnss_dns.so.2 \
+	libnss_files.so.2 \
 
 KOBO_SYS_LIB_PATHS = $(addprefix $(SYSROOT)/lib/,$(KOBO_SYS_LIB_NAMES))
 
