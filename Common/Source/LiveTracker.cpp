@@ -258,7 +258,7 @@ void LiveTrackerInit() {
 #ifdef USE_CURL
       http_session =std::make_unique<HttpSession>();
       if(http_session) {
-         http_session->SetTimeout(5);
+         http_session->SetTimeout(1);
       }
 #endif
 
@@ -434,7 +434,7 @@ static int DoTransactionToServer(const char* server_name, int server_port,char *
 
 				const std::string response = session.Response();
 				if ( response.size() > maxrxbuflen )
-				return 0;
+					return 0;
 				std::copy(response.begin(), response.end(), rxbuf);
 				rxbuf[response.size()] = '\0';
 
@@ -1705,7 +1705,6 @@ static void LiveTrackerThread2() {
 	int tracker_fsm = 0;
 	livetracker_point_t sendpoint = { 0 };
 	bool sendpoint_processed = false;
-	bool packet_processed = false;
 
 	bool sendpoint_valid = false;
 	// Session variables
@@ -1715,15 +1714,13 @@ static void LiveTrackerThread2() {
 	_t_run = true;
 
 	do {
-		if (NewDataEvent.tryWait(5000))
-			NewDataEvent.reset();
+		InterruptibleSleep(DELAY);
 		if (!_t_run)
 			break;
 		sendpoint_processed = false;
 
 		if (1) {
 			sendpoint_valid = false;
-			packet_processed = false;
 			ScopeLock guard(_t_mutex);
 			if (!_t_points.empty()) {
 				sendpoint = _t_points.front();
@@ -1761,7 +1758,7 @@ static void LiveTrackerThread2() {
 				break;
 			case 3:
 				//Gps point packet
-				packet_processed = SendGPSPointPacket2(&packet_id);
+				SendGPSPointPacket2(&packet_id);
 				if (!sendpoint.flying) {
 					tracker_fsm++;
 				}
@@ -1778,10 +1775,8 @@ static void LiveTrackerThread2() {
 			}   // sw
 
 		}
-		if (packet_processed) {
-			InterruptibleSleep(DELAY);
 
-		}
+
 	} while (_t_run);
 
 	_t_end = true;
