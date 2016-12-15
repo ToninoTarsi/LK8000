@@ -417,33 +417,38 @@ static bool InterruptibleSleep(int msecs) {
 
 #ifdef USE_CURL
 
- static int DoTransactionToServer(const char* server_name, int server_port,char *txbuf, char *rxbuf, unsigned int maxrxbuflen) {
+static int DoTransactionToServer(const char* server_name, int server_port,char *txbuf, char *rxbuf, unsigned int maxrxbuflen) {
+
+	if (1) {
 
 		ScopeLock guard(_curl_mutex);
 
 #ifdef LT_DEBUG
-	StartupStore(TEXT(".DoTransactionToServerCurl txbuf : %s%s"), txbuf, NEWLINE);
+		StartupStore(TEXT(".DoTransactionToServerCurl txbuf : %s%s"), txbuf, NEWLINE);
 #endif
 
-    if(http_session) {
-        HttpSession& session = *http_session.get();
+		if(http_session) {
+			HttpSession& session = *http_session.get();
 
-        if(session.Request(server_name, server_port, txbuf)) {
+			if(session.Request(server_name, server_port, txbuf)) {
 
-            const std::string response = session.Response();
-            std::copy(response.begin(), response.end(), rxbuf);
-            rxbuf[response.size()] = '\0';
+				const std::string response = session.Response();
+				if ( response.size() > maxrxbuflen )
+				return 0;
+				std::copy(response.begin(), response.end(), rxbuf);
+				rxbuf[response.size()] = '\0';
 
 #ifdef LT_DEBUG
-	StartupStore(TEXT(".DoTransactionToServer recv len=%d: %s%s"), response.size(), rxbuf, NEWLINE);
+				StartupStore(TEXT(".DoTransactionToServer recv len=%d: %s%s"), (int)response.size(), rxbuf, NEWLINE);
 #endif
 
-            return response.size();
+				return response.size();
 
-        }
-    }
-    return -1;
- }
+			}
+		}
+	}
+	return -1;
+}
 
 #else
 
@@ -1195,8 +1200,7 @@ static bool LiveTrack24_Radar() {
 	picojson::array list = json.get("userlist").get<picojson::array>();
 
 #ifdef LT_DEBUG
-	StartupStore(TEXT(". LiveRadar list.size =%d %s"), list.size(),
-			NEWLINE);
+	StartupStore(TEXT(". LiveRadar list.size =%d %s"), (int)list.size(),NEWLINE);
 #endif
 
 	for (picojson::array::iterator iter = list.begin(); iter != list.end();
@@ -1484,8 +1488,7 @@ static int GetUserIDFromServer2() {
 	sprintf(txbuf, "/api/t/lt/getUserID/%s/%s/%s/0/0/%s/%s", appKey, "1.0",
 			"LK8000", pwt0.c_str(), _username);
 
-	rxlen = DoTransactionToServer("t2.livetrack24.com", 80, txbuf, rxcontent,
-			sizeof(rxcontent));
+	rxlen = DoTransactionToServer("t2.livetrack24.com", 80, txbuf, rxcontent,sizeof(rxcontent));
 	if (rxlen > 0) {
 		rxcontent[rxlen] = 0;
 
@@ -1619,6 +1622,11 @@ static bool SendGPSPointPacket2(unsigned int *packet_id) {
 	if (1) {
 		ScopeLock guard(_t_mutex);
 		nPoints = _t_points.size();
+
+#ifdef LT_DEBUG
+		StartupStore(TEXT(".Livetrack24 SendGPSPointPacket2 %d points in buffer %s"), nPoints,NEWLINE);
+#endif
+
 		if (nPoints == 0)
 			return false;
 	}
@@ -1724,9 +1732,9 @@ static void LiveTrackerThread2() {
 		} //mutex
 
 		if (sendpoint_valid) {
-#ifdef LT_DEBUG
-			StartupStore(TEXT(". Livetracker TRACKER sendpoint.flying: %d - tracker_fsm: %d %s"), sendpoint.flying,tracker_fsm,NEWLINE);
-#endif
+//#ifdef LT_DEBUG
+//			StartupStore(TEXT(". Livetracker TRACKER sendpoint.flying: %d - tracker_fsm: %d %s"), sendpoint.flying,tracker_fsm,NEWLINE);
+//#endif
 
 			switch (tracker_fsm) {
 			default:
