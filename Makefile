@@ -664,6 +664,7 @@ ifeq ($(CONFIG_LINUX),y)
  LDLIBS += $(SNDFILE_LDLIBS)
  LDLIBS += $(LIBINPUT_LDLIBS)
  LDLIBS += $(LIBUDEV_LDLIBS)
+ LDLIBS += $(CURL_LDLIBS)
 
 endif
 
@@ -1102,7 +1103,11 @@ COMMS	:=\
 	$(CMM)/Bluetooth/BtHandlerWince.cpp \
 	$(CMM)/Bluetooth/BthPort.cpp \
 	$(CMM)/Obex/CObexPush.cpp \
-
+ifeq ($(USE_CURL),y)
+COMMS	+=\
+	$(CMM)/curl/LibCurlGlobalInit.cpp\
+	$(CMM)/curl/HttpSession.cpp\
+endif
 
 DEVS	:=\
 	$(DEV)/devBase.cpp \
