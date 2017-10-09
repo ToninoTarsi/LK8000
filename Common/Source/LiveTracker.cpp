@@ -50,6 +50,11 @@
 #include "FlarmCalculations.h"
 #include "md5.h"
 #include "NavFunctions.h"
+#include "utils/make_unique.h"
+
+#ifdef USE_CURL
+	#include <Comm/curl/HttpSession.h>
+#endif
 
 extern int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id);
 extern void CheckBackTarget(NMEA_INFO *pGPS, int flarmslot);
@@ -103,6 +108,7 @@ typedef std::deque<livetracker_point_t> PointQueue;
 
 //Protected thread storage
 static Mutex _t_mutex;                  // Mutex
+static Mutex _curl_mutex;                  // Mutex
 static bool _t_run = false;             // Thread run
 static bool _t_end = false;             // Thread end
 static PointQueue _t_points;            // Point FIFO
@@ -203,6 +209,10 @@ static char* UrlEncode(const char *szText, char* szDst, int bufsize) {
 	return szDst;
 }
 
+#ifdef USE_CURL
+  std::unique_ptr<HttpSession> http_session;
+#endif
+
 // Init Live Tracker services, if available
 void LiveTrackerInit() {
 	if (LiveTrackerInterval == 0
@@ -241,6 +251,13 @@ void LiveTrackerInit() {
 
 	//Init winsock if available
 	if (InitWinsock()) {
+#ifdef USE_CURL
+      http_session =std::make_unique<HttpSession>();
+      if(http_session) {
+         http_session->SetTimeout(5);
+      }
+#endif
+
 		_ws_inited = true;
 
 		// Create a thread for sending data to the server
@@ -297,7 +314,9 @@ void LiveTrackerShutdown() {
 		_ThreadRadar.join();
 		StartupStore(TEXT(". LiveRadar closed.%s"), NEWLINE);
 	}
-
+#ifdef USE_CURL
+  http_session.reset();
+#endif
 #ifdef WIN32
 	if (_ws_inited) {
 		WSACleanup();
@@ -393,6 +412,43 @@ static bool InterruptibleSleep(int msecs) {
 	} while (secs--);
 	return false;
 }
+
+#ifdef USE_CURL
+
+static int DoTransactionToServer(const char* server_name, int server_port,char *txbuf, char *rxbuf, unsigned int maxrxbuflen) {
+
+	if (1) {
+
+		ScopeLock guard(_curl_mutex);
+
+#ifdef LT_DEBUG
+		StartupStore(TEXT(".DoTransactionToServerCurl txbuf : %s%s"), txbuf, NEWLINE);
+#endif
+
+		if(http_session) {
+			HttpSession& session = *http_session.get();
+
+			if(session.Request(server_name, server_port, txbuf)) {
+
+				const std::string response = session.Response();
+				if ( response.size() > maxrxbuflen )
+				return 0;
+				std::copy(response.begin(), response.end(), rxbuf);
+				rxbuf[response.size()] = '\0';
+
+#ifdef LT_DEBUG
+				StartupStore(TEXT(".DoTransactionToServer recv len=%d: %s%s"), (int)response.size(), rxbuf, NEWLINE);
+#endif
+
+				return response.size();
+
+			}
+		}
+	}
+	return -1;
+}
+
+#else
 
 // Establish a connection with the data server
 // Returns a valid SOCKET if ok, INVALID_SOCKET if failed 
@@ -593,6 +649,8 @@ static int DoTransactionToServer(const char* server_name, int server_port,
 	closesocket(s);
 	return rxlen;
 }
+
+#endif
 
 // Get the user id from Leonardo servername
 // returns 0=no id, -1=transaction failed

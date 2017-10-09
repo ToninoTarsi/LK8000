@@ -78,6 +78,7 @@
 #include "Kobo/Kernel.hpp"
 #include "Hardware/CPU.hpp"
 #include "LKInterface/CScreenOrientation.h"
+#include "Comm/curl/LibCurlGlobalInit.h"
 #include <time.h>
 #include "utils/openzip.h"
 
