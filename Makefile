@@ -1103,10 +1103,12 @@ COMMS	:=\
 	$(CMM)/Bluetooth/BtHandlerWince.cpp \
 	$(CMM)/Bluetooth/BthPort.cpp \
 	$(CMM)/Obex/CObexPush.cpp \
+	
 ifeq ($(USE_CURL),y)
 COMMS	+=\
 	$(CMM)/curl/LibCurlGlobalInit.cpp\
 	$(CMM)/curl/HttpSession.cpp\
+	
 endif
 
 DEVS	:=\
