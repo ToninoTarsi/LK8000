@@ -118,26 +118,30 @@ sudo PATH=$USER_PATH:$PATH \
     make install
 cd ..
 
-# install libcurl ( 7.51.0 - 2016-12-13 )
-wget http://curl.haxx.se/download/curl-7.51.0.tar.gz
-tar xzf curl-7.51.0.tar.gz
+# install libcurl ( 7.55.1 - 2017-10-10 )
+wget http://curl.haxx.se/download/curl-7.55.1.tar.gz
+tar xzf curl-7.55.1.tar.gz
 mkdir curl-build
 cd curl-build
 CFLAGS="-O3 -march=armv7-a -mfpu=neon" \
-../curl-7.51.0/configure \
+../curl-7.55.1/configure \
     --host=arm-unknown-linux-gnueabi \
     --target=arm-unknown-linux-gnueabi \
     --prefix=/opt/kobo/arm-unknown-linux-gnueabi \
-	--enable-static --disable-shared \
-    --enable-http --with-gnutls --enable-ipv6 \
-    --disable-shared \
-	--disable-ftp --disable-file --disable-ldap --disable-ldaps \
-    --disable-rtsp --disable-proxy --disable-dict --disable-telnet \
-    --disable-tftp --disable-pop3 --disable-imap --disable-smb \
-    --disable-smtp --disable-gopher --disable-manual \
-	--disable-threaded-resolver --disable-sspi \
-    --disable-crypto-auth --disable-ntlm-wb --disable-tls-srp --disable-cookies \
-    --without-ssl --without-nss --without-libssh2 \
+    --disable-shared  --enable-static \
+    --disable-debug \
+    --enable-http \
+    --enable-ipv6 \
+    --enable-ftp  --disable-file \
+    --disable-ldap  --disable-ldaps \
+    --disable-rtsp  --disable-proxy  --disable-dict  --disable-telnet \
+    --disable-tftp  --disable-pop3  --disable-imap  --disable-smb \
+    --disable-smtp \
+    --disable-gopher \
+    --disable-manual \
+    --disable-threaded-resolver  --disable-verbose  --disable-sspi \
+    --disable-crypto-auth  --disable-ntlm-wb  --disable-tls-srp  --disable-cookies \
+    --without-ssl  --without-gnutls  --without-nss  --without-libssh2 \
     PKG_CONFIG_LIBDIR=/opt/kobo/arm-unknown-linux-gnueabi/lib/pkgconfig
 
 make
