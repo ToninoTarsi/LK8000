@@ -5,7 +5,7 @@
  */
 
 //Use to log transactions to the startupstore
-//#define LT_DEBUG  1
+#define LT_DEBUG  1
 
 #ifdef WIN32
 #ifdef PPC2002
@@ -415,7 +415,11 @@ static bool InterruptibleSleep(int msecs) {
 
 #ifdef USE_CURL
 
-static int DoTransactionToServer(const char* server_name, int server_port,char *txbuf, char *rxbuf, unsigned int maxrxbuflen) {
+static int DoTransactionToServer(const char* server_name, int server_port,const char *txbuf, char *rxbuf, unsigned int maxrxbuflen) {
+
+//	char ssl_server_name[200];
+//	strcpy(ssl_server_name,"https://");
+//	strcat(ssl_server_name,server_name);
 
 	if (1) {
 
