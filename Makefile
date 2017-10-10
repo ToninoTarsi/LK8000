@@ -389,6 +389,13 @@ ifeq ($(CONFIG_LINUX),y)
   USE_SDL :=n
  endif
 
+USE_CURL = $(shell $(PKG_CONFIG) --exists libcurl && echo y)
+ ifeq ($(USE_CURL),y)
+  $(eval $(call pkg-config-library,CURL,libcurl))
+  CE_DEFS += $(patsubst -I%,-isystem %,$(CURL_CPPFLAGS))
+  CE_DEFS += -DUSE_CURL
+endif
+
  ifeq ($(ENABLE_MESA_KMS),y)
   $(eval $(call pkg-config-library,DRM,libdrm))
   $(eval $(call pkg-config-library,GBM,gbm))
