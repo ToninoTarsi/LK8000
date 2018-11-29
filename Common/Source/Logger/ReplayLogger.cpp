@@ -444,6 +444,26 @@ void ReplayLogger::Start(void) {
   }
 }
 
+void ReplayLogger::Load(void) {
+  double t1, Lat1, Lon1, Alt1;
+
+  flightstats.Reset();
+  LockFlightData();
+
+  while  ( ReadPoint(&t1,&Lat1,&Lon1,&Alt1) ) {
+    CContestMgr::Instance().Add(t1,Lat1,Lon1,Alt1);
+  }
+
+  GPS_INFO.Latitude = Lat1;
+  GPS_INFO.Longitude = Lon1;
+  GPS_INFO.Speed = 0;
+  GPS_INFO.TrackBearing = 0;
+  GPS_INFO.Altitude = Alt1;
+  GPS_INFO.BaroAltitude = QNEAltitudeToQNHAltitude(Alt1);
+  GPS_INFO.Time = t1;
+  UnlockFlightData();
+}
+
 
 TCHAR* ReplayLogger::GetFilename(void) {
   return FileName;

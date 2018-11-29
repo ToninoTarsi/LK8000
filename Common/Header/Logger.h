@@ -34,6 +34,7 @@ class ReplayLogger {
   static bool Update(void);
   static void Stop(void);
   static void Start(void);
+  static void Load(void);
   static TCHAR* GetFilename(void);
   static void SetFilename(const TCHAR *name);
   static bool IsEnabled(void);

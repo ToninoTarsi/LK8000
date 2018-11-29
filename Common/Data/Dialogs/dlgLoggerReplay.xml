@@ -7,6 +7,7 @@
     </WndProperty>
     <WndButton   Caption="_@M657_" X="2" Y="50" Width="68"  Height="22" Font="2" OnClickNotify="OnStartClicked" />
     <WndButton   Caption="_@M670_" X="70" Y="50" Width="68"  Height="22" Font="2" OnClickNotify="OnStopClicked" />
+    <WndButton   Caption="Load" X="170" Y="2" Width="68"  Height="22" Font="2" OnClickNotify="OnLoadClicked" />
     <WndProperty Name="prpRate" Caption="_@M544_"  X="140" Y="50"  Width="-2" Height="22" CaptionWidth="45" Font="2" Help="_@H450_">
       <DataField Name="" DataType="double" DisplayFormat="%.0f x" EditFormat="%.0f" Min="0" Max="999" Step="1"  OnDataAccess="OnRateData"/>
     </WndProperty>

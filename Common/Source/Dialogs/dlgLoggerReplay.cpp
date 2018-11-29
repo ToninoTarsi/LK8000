@@ -19,6 +19,18 @@ static void OnStopClicked(WndButton* pWnd) {
   ReplayLogger::Stop();
 }
 
+static void OnLoadClicked(WndButton* pWnd) {
+  WndProperty* wp;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpIGCFile"));
+  if (wp) {
+    DataFieldFileReader* dfe;
+    dfe = (DataFieldFileReader*)wp->GetDataField();
+    ReplayLogger::SetFilename(dfe->GetPathFile());
+  }
+  ReplayLogger::Load();
+}
+
+
 static void OnStartClicked(WndButton* pWnd) {
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(TEXT("prpIGCFile"));
@@ -64,6 +76,7 @@ static CallBackTableEntry_t CallBackTable[]={
   ClickNotifyCallbackEntry(OnStartClicked),
   DataAccessCallbackEntry(OnRateData),
   ClickNotifyCallbackEntry(OnCloseClicked),
+  ClickNotifyCallbackEntry(OnLoadClicked),
   EndCallBackEntry()
 };
 
