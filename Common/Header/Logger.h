@@ -38,11 +38,13 @@ class ReplayLogger {
   static TCHAR* GetFilename(void);
   static void SetFilename(const TCHAR *name);
   static bool IsEnabled(void);
+  static bool IsLoading(void);
   static double TimeScale;
  private:
   static bool UpdateInternal(void);
   static bool ReadLine(TCHAR *buffer);
   static bool Enabled;
+  static bool Loading;
   static bool ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
 			 double *Longitude, double *Altitude);
   static bool ReadPoint(double *Time,

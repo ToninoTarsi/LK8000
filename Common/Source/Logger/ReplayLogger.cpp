@@ -138,12 +138,16 @@ bool ReplayLogger::ReadPoint(double *Time,
 
 TCHAR ReplayLogger::FileName[MAX_PATH+1];
 bool ReplayLogger::Enabled = false;
+bool ReplayLogger::Loading = false;
 double ReplayLogger::TimeScale = 1.0;
 
 bool ReplayLogger::IsEnabled(void) {
   return Enabled;
 }
 
+bool ReplayLogger::IsLoading(void) {
+  return Loading;
+}
 
 typedef struct _LOGGER_INTERP_POINT
 {
@@ -445,14 +449,18 @@ void ReplayLogger::Start(void) {
 }
 
 void ReplayLogger::Load(void) {
+
+  Loading = true;
+
   double t1, Lat1, Lon1, Alt1;
 
   flightstats.Reset();
   LockFlightData();
-
   while  ( ReadPoint(&t1,&Lat1,&Lon1,&Alt1) ) {
     CContestMgr::Instance().Add(t1,Lat1,Lon1,Alt1);
   }
+
+  CContestMgr::Instance().Add(t1+1,Lat1,Lon1,Alt1);
 
   GPS_INFO.Latitude = Lat1;
   GPS_INFO.Longitude = Lon1;
@@ -461,6 +469,7 @@ void ReplayLogger::Load(void) {
   GPS_INFO.Altitude = Alt1;
   GPS_INFO.BaroAltitude = QNEAltitudeToQNHAltitude(Alt1);
   GPS_INFO.Time = t1;
+
   UnlockFlightData();
 }
 

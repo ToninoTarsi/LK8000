@@ -129,6 +129,7 @@ bool FlightTimes(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   // Ever.. 
   if ((Basic->Time != 0) && (Basic->Time <= LastTime)) {
 
+    if (ReplayLogger::IsLoading() ) goto _noreset;
 	// If in real flight, never reset
 	if (!ReplayLogger::IsEnabled() && Calculated->Flying) goto _noreset;
 
