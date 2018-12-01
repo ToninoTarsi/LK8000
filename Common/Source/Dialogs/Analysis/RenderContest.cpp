@@ -19,15 +19,14 @@ CContestMgr::TType contestType = CContestMgr::TYPE_OLC_CLASSIC;
  ****************************************************************/
 void Statistics::RenderContest(LKSurface& Surface, const RECT& rc)
 {
-  if ( false ) {
 
-//if((contestType == CContestMgr::TYPE_FAI_TRIANGLE)
-//   || (contestType == CContestMgr::TYPE_FAI_TRIANGLE4)
-//#ifdef  FIVEPOINT_OPTIMIZER
-//   || (contestType == CContestMgr::TYPE_FAI_TRIANGLE5)
-//#endif
-//  )
-//{
+if((contestType == CContestMgr::TYPE_FAI_TRIANGLE)
+   || (contestType == CContestMgr::TYPE_FAI_TRIANGLE4)
+#ifdef  FIVEPOINT_OPTIMIZER
+   || (contestType == CContestMgr::TYPE_FAI_TRIANGLE5)
+#endif
+  )
+{
     RenderFAIOptimizer(Surface, rc);
 }
 else
