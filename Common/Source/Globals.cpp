@@ -282,9 +282,9 @@ void Globals_Init(void) {
   GestureSize=60;
   IphoneGestures=false;
 
-  PGClimbZoom=1;
-  PGCruiseZoom=1;
-  PGAutoZoomThreshold = 5000;
+  ClimbZoom=1;
+  CruiseZoom=1;
+  MaxAutoZoomThreshold = 5000;
   // This is the gauge bar on the left for variometer
   LKVarioBar=0;
   // This is the value to be used for painting the bar

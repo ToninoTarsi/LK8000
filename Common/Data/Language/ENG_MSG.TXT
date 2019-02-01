@@ -2342,3 +2342,5 @@ _@M2390_ "Toggle Draw XC"
 
 _@M2391_ "Earth Model"
 _@M2392_ "Error: Port not opened!"
+
+_@M2393_ "23 Options"
