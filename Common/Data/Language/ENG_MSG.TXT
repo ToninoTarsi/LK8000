@@ -1687,8 +1687,8 @@ _@M1695_ "Logger"
 # max 3-4 chars!
 _@M1696_ "auto"
 
-# PG autozoom threshold on config page 23
-_@M1697_ "Autozoom threshold"
+# PG autozoom threshold on config page 23 - Removed and replaved by 2394/2395
+#_@M1697_ "Autozoom threshold"
 
 #Multitarget bearing infobox
 _@M1698_ "Multitarget Bearing"
@@ -2344,3 +2344,6 @@ _@M2391_ "Earth Model"
 _@M2392_ "Error: Port not opened!"
 
 _@M2393_ "23 Options"
+_@M2394_ "Min Autozoom threshold"
+_@M2395_ "Max Autozoom threshold"
+

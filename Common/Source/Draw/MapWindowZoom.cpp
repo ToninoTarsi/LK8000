@@ -89,42 +89,35 @@ void MapWindow::Zoom::CalculateAutoZoom()
      }
 }
 
-double MapWindow::Zoom::GetPgClimbZoomInitValue(int parameter_number) const
-{
-  // Initial PG circling zoom map scales. Parameter number equal to config dlg item index
-  // Values are given in user units, km or mi what is selected.
-  switch(parameter_number) {
-    case 0: return 0.015;
-    case 1: return 0.025;
-    case 2: return 0.04;
-    case 3: return 0.07;
-    case 4: return 0.1;
-    case 5: return 0.15;
-    default: return 0.025;
-  }
-}
 
-double MapWindow::Zoom::GetPgCruiseZoomInitValue(int parameter_number) const
+
+double MapWindow::Zoom::GetZoomInitValue(int parameter_number) const
 {
-  // Initial PG cruise zoom map scales. Parameter number equal to config dlg item index
+  // Initial cruise/ zoom map scales. Parameter number equal to config dlg item index
   // Values are given in user units, km or mi what is selected.
   // These values used to select the best available mapscale from scalelist. See MapWindow::FillScaleListForEngineeringUnits()
   switch(parameter_number) { // 091108
-    case 0: return 0.04;
-    case 1: return 0.07;
-    case 2: return 0.10;
-    case 3: return 0.15;
-    case 4: return 0.20;
-    case 5: return 0.35;
-    case 6: return 0.50;
-    case 7: return 0.75;
-    case 8: return 1.00;
-    case 9: return 1.50;
-    case 10: return 2.00;
-    case 11: return 3.50;
-    case 12: return 5.00;
-    case 13: return 7.50;
-    case 14: return 10.00;
+    case 0: return 0.025;
+    case 1: return 0.04;
+    case 2: return 0.07;
+    case 3: return 0.10;
+    case 4: return 0.15;
+    case 5: return 0.20;
+    case 6: return 0.35;
+    case 7: return 0.50;
+    case 8: return 0.75;
+    case 9: return 1.00;
+    case 10: return 1.50;
+    case 11: return 2.00;
+    case 12: return 3.50;
+    case 13: return 5.00;
+    case 14: return 7.50;
+    case 15: return 15.00;
+    case 16: return 20.00;
+    case 17: return 25.00;
+    case 18: return 40.00;
+    case 29: return 50.00;
+    case 20: return 75.00;
     default: return 0.35;
   }
 }
@@ -133,26 +126,10 @@ double MapWindow::Zoom::GetPgCruiseZoomInitValue(int parameter_number) const
  */
 void MapWindow::Zoom::Reset()
 {
-  switch(AircraftCategory) {
-  case umGlider:
-  case umGAaircraft:
-    _modeScale[SCALE_CRUISE]   = SCALE_CRUISE_INIT;
-    _modeScale[SCALE_CIRCLING] = SCALE_CIRCLING_INIT;
-    _modeScale[SCALE_PANORAMA] = SCALE_PANORAMA_INIT;
-    break;
 
-  case umParaglider:
-  case umCar:
-    _modeScale[SCALE_CRUISE]   = GetPgCruiseZoomInitValue(CruiseZoom);
-    _modeScale[SCALE_CIRCLING] = GetPgClimbZoomInitValue(ClimbZoom);
-    _modeScale[SCALE_PANORAMA] = SCALE_PG_PANORAMA_INIT;
-    break;
-
-  default:
-    // make it an evident problem
-    _modeScale[SCALE_CRUISE] = _modeScale[SCALE_CIRCLING] = _modeScale[SCALE_PANORAMA] = SCALE_INVALID_INIT;
-    break;
-  }
+  _modeScale[SCALE_CRUISE] = GetZoomInitValue(CruiseZoom);
+  _modeScale[SCALE_CIRCLING] = GetZoomInitValue(ClimbZoom);
+  _modeScale[SCALE_PANORAMA] = SCALE_PG_PANORAMA_INIT;
 
   // Correct _modeScale[] values for internal use
   // You have to give values in user units (km,mi, what is selected), we need to divide it by 1.4
@@ -393,18 +370,13 @@ void MapWindow::Zoom::ModifyMapScale()
 }
 
 
-bool MapWindow::Zoom::GetPgClimbInitMapScaleText(int init_parameter, TCHAR *out, size_t size) const
-{
-  double mapscale = GetPgClimbZoomInitValue(init_parameter);
 
-  // Get nearest discrete value
-  double ms = MapWindow::FindMapScale(mapscale/1.4)*1.4;
-  return Units::FormatUserMapScale(NULL, Units::ToSysDistance(ms), out, size);
-}
 
-bool MapWindow::Zoom::GetPgCruiseInitMapScaleText(int init_parameter, TCHAR *out, size_t size) const
+bool MapWindow::Zoom::GetInitMapScaleText(int init_parameter,
+                                          TCHAR *out,
+                                          size_t size) const
 {
-  double mapscale = GetPgCruiseZoomInitValue(init_parameter);
+  double mapscale = GetZoomInitValue(init_parameter);
 
   // Get nearest discrete value
   double ms = MapWindow::FindMapScale(mapscale/1.4)*1.4;

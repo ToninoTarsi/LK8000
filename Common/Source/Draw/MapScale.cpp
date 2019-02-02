@@ -9,38 +9,28 @@
 #include "externs.h"
 
 
-
 double MapWindow::LimitMapScale(double value) {
 
-  double minreasonable=5.0;		// give minreasonable values in system units, in meters! (what you would like to see on the mapscale)
+  double minreasonable = MapWindow::zoom.GetZoomInitValue(0)*1000;
+  double maxreasonable = MapWindow::zoom.GetZoomInitValue(20)*1000;
+  minreasonable = Units::ToUserDistance(minreasonable / 1.4);        // 1.4 for mapscale symbol .. ????
+  maxreasonable = Units::ToUserDistance(maxreasonable / 1.4);        // 1.4 for mapscale symbol .. ????
 
-  if (mode.Is(Mode::MODE_CIRCLING)) {
-      // during circling
-      minreasonable = 50.0;
-      if ( ISPARAGLIDER ) minreasonable = 10.0;
-  } else {
-      // if not circling
-      minreasonable = 100.0;
-      if ( ISPARAGLIDER || ISCAR ) minreasonable = 10.0;
-      if (zoom.AutoZoom()) {
-	if (AATEnabled && (ActiveTaskPoint>0)) {
-	  if ( ISPARAGLIDER ) minreasonable = 10.0; else minreasonable = 1200.0;
-	} else {
-	  if ( ISPARAGLIDER ) minreasonable = 10.0; else minreasonable = 600.0;
-	}
-      }
+  if (!mode.Is(Mode::MODE_CIRCLING) && zoom.AutoZoom()) {
+    minreasonable = MapWindow::zoom.GetZoomInitValue(MinAutoZoomThreshold)*1000;
+    maxreasonable = MapWindow::zoom.GetZoomInitValue(MaxAutoZoomThreshold)*1000;
+    minreasonable = Units::ToUserDistance(minreasonable / 1.4);        // 1.4 for mapscale symbol .. ????
+    maxreasonable = Units::ToUserDistance(maxreasonable / 1.4);        // 1.4 for mapscale symbol .. ????
   }
-
-  minreasonable = Units::ToUserDistance(minreasonable / 1.4);		// 1.4 for mapscale symbol
 
   // return value in user distance units!!!
-  if (ScaleListCount>0) {
-    return FindMapScale(max(minreasonable,min(160.0,value)));		//maximum limit in user distance units!
-  } else {
-    return max(minreasonable,min(160.0,value));				//maximum limit in user distance units!
+  if (ScaleListCount > 0) {
+    return FindMapScale(max(minreasonable, min(maxreasonable, value)));        //maximum limit in user distance units!
   }
-}
 
+  return max(minreasonable, min(maxreasonable, value));                //maximum limit in user distance units!
+
+}
 
 //
 // DO NOT CHANGE. This is the unity upon which rescaling relies on.

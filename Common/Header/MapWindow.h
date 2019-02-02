@@ -269,8 +269,7 @@ class MapWindow {
     double DrawScale() const             { return _drawScale; }
     double InvDrawScale() const          { return _invDrawScale; }
 
-    double GetPgClimbZoomInitValue(int parameter_number) const;
-    double GetPgCruiseZoomInitValue(int parameter_number) const;
+    double GetZoomInitValue(int parameter_number) const;
 
   public:
 
@@ -298,8 +297,7 @@ class MapWindow {
     void UpdateMapScale();
     void ModifyMapScale();
 
-    bool GetPgClimbInitMapScaleText(int init_parameter, TCHAR *out, size_t size) const;
-    bool GetPgCruiseInitMapScaleText(int init_parameter, TCHAR *out, size_t size) const;
+    bool GetInitMapScaleText(int init_parameter, TCHAR *out, size_t size) const;
 
   };
 

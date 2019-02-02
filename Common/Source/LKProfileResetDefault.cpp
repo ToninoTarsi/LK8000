@@ -141,9 +141,12 @@ void LKProfileResetDefault(void) {
 
   CheckSum = 1;
 
-  CruiseZoom=4;
-  MaxAutoZoomThreshold = 5000;
-  ClimbZoom=1;
+  // int mapped to scale using MapWindow::Zoom::GetZoomInitValue
+  CruiseZoom=12;
+  ClimbZoom=3;
+  MinAutoZoomThreshold = 7;
+  MaxAutoZoomThreshold = 14;
+
   AutoOrientScale=100;
 
   PGOpenTimeH=12;

@@ -218,9 +218,11 @@ GEXTERN short GlideBarOffset; // offset to the right for drawing LK8000 with GB 
 GEXTERN bool  EngineeringMenu; // not saved in registry
 GEXTERN short DeclutterMode;
 
+// the following values are int mapped to scale using MapWindow::Zoom::GetZoomInitValue
 GEXTERN int ClimbZoom;
 GEXTERN int CruiseZoom;
-GEXTERN double MaxAutoZoomThreshold;
+GEXTERN int MinAutoZoomThreshold;
+GEXTERN int MaxAutoZoomThreshold;
 
 // This is the gauge bar on the left for variometer
 GEXTERN int LKVarioBar;

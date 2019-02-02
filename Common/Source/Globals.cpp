@@ -282,9 +282,12 @@ void Globals_Init(void) {
   GestureSize=60;
   IphoneGestures=false;
 
-  ClimbZoom=1;
-  CruiseZoom=1;
-  MaxAutoZoomThreshold = 5000;
+  // int mapped to scale using MapWindow::Zoom::GetZoomInitValue
+  CruiseZoom=12;
+  ClimbZoom=3;
+  MinAutoZoomThreshold = 7;
+  MaxAutoZoomThreshold = 14;
+
   // This is the gauge bar on the left for variometer
   LKVarioBar=0;
   // This is the value to be used for painting the bar

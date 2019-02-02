@@ -2215,20 +2215,20 @@ DataField* dfe = wp->GetDataField();
   if (wp) {
     TCHAR buf1[32];
     DataField* dfe = wp->GetDataField();
-    for (int i=0; i<=5; ++i) {
-      MapWindow::zoom.GetPgClimbInitMapScaleText(i, buf1, sizeof(buf1)/sizeof(buf1[0]));
+    for (int i=0; i<=20; ++i) {
+      MapWindow::zoom.GetInitMapScaleText(i, buf1, sizeof(buf1)/sizeof(buf1[0]));
       dfe->addEnumText(buf1);
     }
     dfe->Set(ClimbZoom);
-    // if (!ISPARAGLIDER) wp->SetVisible(false); 
     wp->RefreshDisplay();
   }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpCruiseZoom"));
   if (wp) {
     TCHAR buf1[32];
     DataField* dfe = wp->GetDataField();
-    for (int i=0; i<=14; ++i) {
-      if (MapWindow::zoom.GetPgCruiseInitMapScaleText(i, buf1, sizeof(buf1)/sizeof(buf1[0]))) {
+    for (int i=0; i<=20; ++i) {
+      if (MapWindow::zoom.GetInitMapScaleText(i,buf1,sizeof(buf1) / sizeof(buf1[0]))) {
 	dfe->addEnumText(buf1);
       } else {
 	_stprintf(buf1,TEXT("%d"),i);
@@ -2236,16 +2236,41 @@ DataField* dfe = wp->GetDataField();
       }
     }
     dfe->Set(CruiseZoom);
-    // if (!ISPARAGLIDER) wp->SetVisible(false); 
     wp->RefreshDisplay();
   }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxAutoZoomThreshold"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(DISTANCEMODIFY*MaxAutoZoomThreshold);
-    wp->GetDataField()->SetUnits(Units::GetDistanceName());
-    // if (!ISPARAGLIDER) wp->SetVisible(false); 
+    TCHAR buf1[32];
+    DataField* dfe = wp->GetDataField();
+    for (int i=0; i<=20; ++i) {
+      if (MapWindow::zoom.GetInitMapScaleText(i,buf1,sizeof(buf1) / sizeof(buf1[0]))) {
+        dfe->addEnumText(buf1);
+      } else {
+        _stprintf(buf1,TEXT("%d"),i);
+        dfe->addEnumText(buf1);
+      }
+    }
+    dfe->Set(MaxAutoZoomThreshold);
     wp->RefreshDisplay();
   }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMinAutoZoomThreshold"));
+  if (wp) {
+    TCHAR buf1[32];
+    DataField* dfe = wp->GetDataField();
+    for (int i=0; i<=20; ++i) {
+      if (MapWindow::zoom.GetInitMapScaleText(i,buf1,sizeof(buf1) / sizeof(buf1[0]))) {
+        dfe->addEnumText(buf1);
+      } else {
+        _stprintf(buf1,TEXT("%d"),i);
+        dfe->addEnumText(buf1);
+      }
+    }
+    dfe->Set(MinAutoZoomThreshold);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoOrientScale"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(AutoOrientScale);
@@ -3618,16 +3643,6 @@ void dlgConfigurationShowModal(short mode){
     }
   }
 
-double dval;
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpMaxAutoZoomThreshold"));
-  if (wp) {
-    dval = wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY;
-    if (MaxAutoZoomThreshold != dval) {
-      MaxAutoZoomThreshold = dval;
-    }
-  }
-  
   wp = (WndProperty*)wf->FindByName(TEXT("prpClimbZoom"));
   if (wp) {
     if ( ClimbZoom != wp->GetDataField()->GetAsInteger()) {
@@ -3636,6 +3651,25 @@ double dval;
         requirerestart=true; 
     }
   }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMaxAutoZoomThreshold"));
+  if (wp) {
+    if ( MaxAutoZoomThreshold != wp->GetDataField()->GetAsInteger()) {
+      MaxAutoZoomThreshold = wp->GetDataField()->GetAsInteger();
+      MapWindow::zoom.Reset();
+      requirerestart=true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMinAutoZoomThreshold"));
+  if (wp) {
+    if ( MinAutoZoomThreshold != wp->GetDataField()->GetAsInteger()) {
+      MinAutoZoomThreshold = wp->GetDataField()->GetAsInteger();
+      MapWindow::zoom.Reset();
+      requirerestart=true;
+    }
+  }
+
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoOrientScale"));
   if (wp) {
