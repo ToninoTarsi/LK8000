@@ -60,8 +60,6 @@ void MapWindow::Zoom::CalculateAutoZoom()
     else
       AutoZoomFactor = 4;
 
-//    if ( ( !ISPARAGLIDER && (wpd < AutoZoomFactor * _scaleOverDistanceModify) ) ||
-//        ( ISPARAGLIDER  && (wpd < MaxAutoZoomThreshold)) ) {
     if (wpd < AutoZoomFactor * _scaleOverDistanceModify) {
       // waypoint is too close, so zoom in
       LKASSERT(AutoZoomFactor != 0);
@@ -322,20 +320,6 @@ void MapWindow::Zoom::UpdateMapScale()
       ModifyMapScale();
     return;
   }
-
-  // in PG mode if autozoom is set to on, and waypoint distance drops below
-  // PGAutoZoomThreshold, we should turn on autozoom if it is off. Do this only once, let the user able to turn it off near WP
-//  if ( ISPARAGLIDER && AutoZoom_Config && !_autoZoom && (DerivedDrawInfo.ZoomDistance>0) && (DerivedDrawInfo.ZoomDistance < MaxAutoZoomThreshold)) {
-//    if (!pg_autozoom_turned_on) {
-//      EventAutoZoom(1);
-//      pg_autozoom_turned_on = true;
-//    }
-//  }
-
-//  if (DerivedDrawInfo.ZoomDistance > (MaxAutoZoomThreshold + 200.0)) {
-//    // Set state variable back to false, with some distance hysteresis
-//    pg_autozoom_turned_on = false;
-//  }
 
   if(_autoZoom &&
      mode.Special() == Mode::MODE_SPECIAL_NONE &&
