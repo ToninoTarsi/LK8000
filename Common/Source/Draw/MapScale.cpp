@@ -27,7 +27,6 @@ double MapWindow::LimitMapScale(double value) {
   if (ScaleListCount > 0) {
     return FindMapScale(max(minreasonable, min(maxreasonable, value)));        //maximum limit in user distance units!
   }
-
   return max(minreasonable, min(maxreasonable, value));                //maximum limit in user distance units!
 
 }

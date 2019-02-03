@@ -1687,8 +1687,8 @@ _@M1695_ "Logger"
 # max 3-4 chars!
 _@M1696_ "auto"
 
-# PG autozoom threshold on config page 23 - Removed and replaved by 2394/2395
-#_@M1697_ "Autozoom threshold"
+# PG autozoom threshold on config page 23 - Removed and replaced by 2394/2395
+#_@M1697_ "Autozoom threshold"   Removed and replaced by 2394/2395
 
 #Multitarget bearing infobox
 _@M1698_ "Multitarget Bearing"

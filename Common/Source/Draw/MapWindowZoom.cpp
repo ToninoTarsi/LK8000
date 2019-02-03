@@ -60,33 +60,39 @@ void MapWindow::Zoom::CalculateAutoZoom()
     else
       AutoZoomFactor = 4;
 
-    if ( ( !ISPARAGLIDER && (wpd < AutoZoomFactor * _scaleOverDistanceModify) ) ||
-	 ( ISPARAGLIDER  && (wpd < MaxAutoZoomThreshold)) ) {
+//    if ( ( !ISPARAGLIDER && (wpd < AutoZoomFactor * _scaleOverDistanceModify) ) ||
+//        ( ISPARAGLIDER  && (wpd < MaxAutoZoomThreshold)) ) {
+    if (wpd < AutoZoomFactor * _scaleOverDistanceModify) {
       // waypoint is too close, so zoom in
-      LKASSERT(AutoZoomFactor!=0);
+      LKASSERT(AutoZoomFactor != 0);
       _modeScale[SCALE_CRUISE] = LimitMapScale(wpd * DISTANCEMODIFY / AutoZoomFactor);
+    }
+    if (wpd > 2 * AutoZoomFactor * _scaleOverDistanceModify) {
+      // waypoint is too far, so zoom out
+      LKASSERT(AutoZoomFactor != 0);
+      _modeScale[SCALE_CRUISE] = LimitMapScale(wpd * DISTANCEMODIFY / 2*AutoZoomFactor);
     }
   }
 
   LockTaskData();  // protect from external task changes
-    // if we aren't looking at a waypoint, see if we are now
-    if(autoMapScaleTaskIndex == -1) {
-      if(ValidTaskPoint(ActiveTaskPoint))
-        autoMapScaleTaskIndex = ActiveTaskPoint;
-    }
+  // if we aren't looking at a waypoint, see if we are now
+  if(autoMapScaleTaskIndex == -1) {
+    if(ValidTaskPoint(ActiveTaskPoint))
+      autoMapScaleTaskIndex = ActiveTaskPoint;
+  }
 
-    if(ValidTaskPoint(ActiveTaskPoint)) {
-      // if the current zoom focused waypoint has changed...
-      if(autoMapScaleTaskIndex != ActiveTaskPoint) {
-        autoMapScaleTaskIndex = ActiveTaskPoint;
-        wait_for_new_wpt_distance = 3;
-        // zoom back out to where we were before
-        _modeScale[SCALE_CRUISE] = _modeScale[SCALE_AUTO_ZOOM];
-      }
+  if(ValidTaskPoint(ActiveTaskPoint)) {
+    // if the current zoom focused waypoint has changed...
+    if(autoMapScaleTaskIndex != ActiveTaskPoint) {
+      autoMapScaleTaskIndex = ActiveTaskPoint;
+      wait_for_new_wpt_distance = 3;
+      // zoom back out to where we were before
+      _modeScale[SCALE_CRUISE] = _modeScale[SCALE_AUTO_ZOOM];
     }
-     {
-       UnlockTaskData();
-     }
+  }
+  {
+    UnlockTaskData();
+  }
 }
 
 
@@ -116,7 +122,7 @@ double MapWindow::Zoom::GetZoomInitValue(int parameter_number) const
     case 16: return 20.00;
     case 17: return 25.00;
     case 18: return 40.00;
-    case 29: return 50.00;
+    case 19: return 50.00;
     case 20: return 75.00;
     default: return 0.35;
   }
@@ -307,7 +313,7 @@ void MapWindow::Zoom::EventScaleZoom(int vswitch)
  */
 void MapWindow::Zoom::UpdateMapScale()
 {
-  static bool pg_autozoom_turned_on = false;
+//  static bool pg_autozoom_turned_on = false;
 
   if(mode.Is(Mode::MODE_TARGET_PAN)) {
     // update TARGET_PAN
@@ -319,16 +325,17 @@ void MapWindow::Zoom::UpdateMapScale()
 
   // in PG mode if autozoom is set to on, and waypoint distance drops below
   // PGAutoZoomThreshold, we should turn on autozoom if it is off. Do this only once, let the user able to turn it off near WP
-  if ( ISPARAGLIDER && AutoZoom_Config && !_autoZoom && (DerivedDrawInfo.ZoomDistance>0) && (DerivedDrawInfo.ZoomDistance < MaxAutoZoomThreshold)) {
-    if (!pg_autozoom_turned_on) {
-      EventAutoZoom(1);
-      pg_autozoom_turned_on = true;
-    }
-  }
-  if (DerivedDrawInfo.ZoomDistance > (MaxAutoZoomThreshold + 200.0)) {
-    // Set state variable back to false, with some distance hysteresis
-    pg_autozoom_turned_on = false;
-  }
+//  if ( ISPARAGLIDER && AutoZoom_Config && !_autoZoom && (DerivedDrawInfo.ZoomDistance>0) && (DerivedDrawInfo.ZoomDistance < MaxAutoZoomThreshold)) {
+//    if (!pg_autozoom_turned_on) {
+//      EventAutoZoom(1);
+//      pg_autozoom_turned_on = true;
+//    }
+//  }
+
+//  if (DerivedDrawInfo.ZoomDistance > (MaxAutoZoomThreshold + 200.0)) {
+//    // Set state variable back to false, with some distance hysteresis
+//    pg_autozoom_turned_on = false;
+//  }
 
   if(_autoZoom &&
      mode.Special() == Mode::MODE_SPECIAL_NONE &&
