@@ -262,6 +262,7 @@ void LKProfileSave(const TCHAR *szFile)
   rprintf(szRegistryUseTwoLines,UseTwoLines);
   rprintf(szRegistryOverlaySize,OverlaySize);
   rprintf(szRegistryMaxAutoZoomThreshold,MaxAutoZoomThreshold);
+  rprintf(szRegistryMinAutoZoomThreshold,MinAutoZoomThreshold);
   rprintf(szRegistryClimbZoom,ClimbZoom);
   rprintf(szRegistryCruiseZoom,CruiseZoom);
   rprintf(szRegistryPGOptimizeRoute,PGOptimizeRoute_Config);

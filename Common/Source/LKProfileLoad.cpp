@@ -515,6 +515,7 @@ void LKParseProfileString(const char *sname, const char *svalue) {
   PREAD(sname,svalue,szRegistryUseTwoLines,&UseTwoLines);
   PREAD(sname,svalue,szRegistryOverlaySize,&OverlaySize);
   PREAD(sname,svalue,szRegistryMaxAutoZoomThreshold,&MaxAutoZoomThreshold);
+  PREAD(sname,svalue,szRegistryMinAutoZoomThreshold,&MinAutoZoomThreshold);
   PREAD(sname,svalue,szRegistryClimbZoom,&ClimbZoom);
   PREAD(sname,svalue,szRegistryCruiseZoom,&CruiseZoom);
  // PREAD(sname,svalue,szRegistryPGGateIntervalTime,&PGGateIntervalTime);
