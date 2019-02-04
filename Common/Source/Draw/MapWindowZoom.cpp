@@ -101,27 +101,30 @@ double MapWindow::Zoom::GetZoomInitValue(int parameter_number) const
   // Values are given in user units, km or mi what is selected.
   // These values used to select the best available mapscale from scalelist. See MapWindow::FillScaleListForEngineeringUnits()
   switch(parameter_number) { // 091108
-    case 0: return 0.025;
-    case 1: return 0.04;
-    case 2: return 0.07;
-    case 3: return 0.10;
-    case 4: return 0.15;
-    case 5: return 0.20;
-    case 6: return 0.35;
-    case 7: return 0.50;
-    case 8: return 0.75;
-    case 9: return 1.00;
-    case 10: return 1.50;
-    case 11: return 2.00;
-    case 12: return 3.50;
-    case 13: return 5.00;
-    case 14: return 7.50;
-    case 15: return 15.00;
-    case 16: return 20.00;
-    case 17: return 25.00;
-    case 18: return 40.00;
-    case 19: return 50.00;
-    case 20: return 75.00;
+    case 0: return 0.01;
+    case 1: return 0.015;
+    case 2: return 0.025;
+    case 3: return 0.04;
+    case 4: return 0.07;
+    case 5: return 0.10;
+    case 6: return 0.15;
+    case 7: return 0.20;
+    case 8: return 0.35;
+    case 9: return 0.50;
+    case 10: return 0.75;
+    case 11: return 1.00;
+    case 12: return 1.50;
+    case 13: return 2.00;
+    case 14: return 3.50;
+    case 15: return 5.00;
+    case 16: return 7.50;
+    case 17: return 10.00;
+    case 18: return 15.00;
+    case 19: return 20.00;
+    case 20: return 25.00;
+    case 21: return 40.00;
+    case 22: return 50.00;
+    case 23: return 75.00;
     default: return 0.35;
   }
 }
