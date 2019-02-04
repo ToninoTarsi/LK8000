@@ -11,8 +11,16 @@
 
 double MapWindow::LimitMapScale(double value) {
 
+//  if (ScaleListCount == 0) {
+//    return value;
+//  }
+//  double minreasonable = ScaleList[0];  //    MapWindow::zoom.GetZoomInitValue(0)*1000;
+//  double maxreasonable = ScaleList[ScaleListCount-1]; // MapWindow::zoom.GetZoomInitValue(20)*1000;
+
+
   double minreasonable = MapWindow::zoom.GetZoomInitValue(0)*1000;
-  double maxreasonable = MapWindow::zoom.GetZoomInitValue(20)*1000;
+  double maxreasonable =  MapWindow::zoom.GetZoomInitValue(20)*1000;
+
   minreasonable = Units::ToUserDistance(minreasonable / 1.4);        // 1.4 for mapscale symbol .. ????
   maxreasonable = Units::ToUserDistance(maxreasonable / 1.4);        // 1.4 for mapscale symbol .. ????
 
