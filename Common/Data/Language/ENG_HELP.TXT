@@ -1983,6 +1983,9 @@ while permanent can be used to test your tracking settings on ground. (Note: Tra
 [Additional Contest Rules]
 Select the scoring rule for the Cross Country Contest (XC). If OFF no contest will be evaluated and available in the XC or OLC infoboxes.
 
+@1300
+[Autozoom Limits]
+When autozoom feature is active it will work between "Min Autozoom" and "Max Autozoom" limits
 
 @9999
 No help available on this item!

@@ -464,6 +464,10 @@ _@M2290_ "Toggle Draw XC"
 _@M2391_ "Earth Model "
 _@M2392_ "Error: Port not opened!"
 
+_@M2393_ "23 Options"
+_@M2394_ "Min Autozoom"
+_@M2395_ "Max Autozoom"
+
 
 HELP FILE
 
@@ -570,3 +574,7 @@ This data is available only if an additional XC Contest Engine is activate in Sy
 This option defines how waypoints outside the terrain range are handled:  
 incl. all waypoints and airspaces outside the terrain will be loaded
 excl. waypoints and airspaces inside the mapterrain will be loaded only
+
+@1300
+[Autozoom Limits]
+When autozoom feature is active it will work between "Min Autozoom" and "Max Autozoom" limits
