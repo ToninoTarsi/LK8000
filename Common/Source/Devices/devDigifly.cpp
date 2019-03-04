@@ -122,7 +122,7 @@ static BOOL PDGFTL1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *pGPS)
   double vtas, vias;
   double altqne, altqnh;
   static bool initqnh=true;
-
+  double wspeed=0, wfrom=0;
 
 
   NMEAParser::ExtractParameter(String,ctemp,0);
@@ -179,6 +179,27 @@ static BOOL PDGFTL1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *pGPS)
 	pGPS->AirspeedAvailable = FALSE;
   }
 
+  bool hasExternalWindSpeed = true;
+  NMEAParser::ExtractParameter(String, ctemp, 6);
+  if (ctemp[0] == '\0') {
+    hasExternalWindSpeed = false;
+  } else {
+    wspeed = StrToDouble(ctemp, NULL);
+    NMEAParser::ExtractParameter(String, ctemp, 7);
+    if (ctemp[0] == '\0') {
+      hasExternalWindSpeed = false;
+    } else {
+      wfrom = StrToDouble(ctemp, NULL);
+    }
+  }
+  
+  if (hasExternalWindSpeed) {
+    pGPS->ExternalWindAvailable = TRUE;
+    pGPS->ExternalWindSpeed = wspeed / TOKPH;
+    pGPS->ExternalWindDirection = wfrom;
+  } else {
+    pGPS->ExternalWindAvailable = FALSE;
+  }
 
   NMEAParser::ExtractParameter(String,ctemp,8);
   pGPS->ExtBatt1_Voltage = StrToDouble(ctemp,NULL)/100;
