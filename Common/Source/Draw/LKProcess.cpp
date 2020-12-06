@@ -36,7 +36,7 @@ constexpr TCHAR infinity[] = { '\xE2', '\x88', '\x9E', '\0' };
  */
 static double GetNextETE(const DERIVED_INFO& info) {
 	double value = -1;
-	if(ISPARAGLIDER) {
+	if(ISPARAGLIDER || ISGLIDER ) {
 		LockTaskData();
 		if (ValidTaskPointFast(ActiveTaskPoint)) {
 			int index = (ACTIVE_WP_IS_AAT_AREA || DoOptimizeRoute()) ? RESWP_OPTIMIZED: Task[ActiveTaskPoint].Index;
